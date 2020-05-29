@@ -13,7 +13,7 @@ depends = .depends
 build : $(salida_out) 
 
 $(salida_out) : $(salida_objects)
-	$(CC) $(CFLAGS) -o $@ $^ -lm
+	$(CC) $(CFLAGS) -o $@ $^ -lm -ljpeg
 
 $(objects) :
 	$(CC) $(CFLAGS) -c -o $@ $*.c

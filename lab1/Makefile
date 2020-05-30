@@ -1,7 +1,7 @@
 salida_out = lab1
 
 
-salida_headers = argumentos.h
+salida_headers = argumentos.h lectura.h conversion.h filtro.h binarizacion.h clasificacion.h
 salida_source  = $(salida_headers:.h=.c) main.c
 salida_objects = $(salida_source:.c=.o)
 

@@ -22,6 +22,8 @@ struct rgb{
 	int red;
 	int green;
 	int blue;
+	float grey;
+	float pixel;
     
  };
  

@@ -2,7 +2,7 @@
 #include "estructura.h"
 
 /*
-	Función que transfoema una imagen RGB a escala de grises.
+	Función que transforma una imagen RGB a escala de grises.
 	Entrada: Matriz con el contenido de la imagen.
 	Salida: Matriz con el contenido de la imagen.
 */

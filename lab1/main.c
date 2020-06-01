@@ -48,7 +48,7 @@ int main(int argc, char * argv[]){
 	matriz = conversionRGBAGris(matriz,alto_bmp,ancho_bmp);
 	//imprimirGris(matriz,alto_bmp,ancho_bmp);
 
-	int ** mascara = (int**)malloc(sizeof(int*)*0);
+	float ** mascara = (float**)malloc(sizeof(float*)*0);
 	//Se obtiene la mascara laplaciana
 	mascara = leerArchivoMascara(nombre_archivo_mascara,mascara);
 
@@ -58,7 +58,7 @@ int main(int argc, char * argv[]){
 
 	//se binariza la imagen.
 	matriz = binarizar(matriz,alto_bmp,ancho_bmp,umbral_bin);
-	//imprimirFiltro(matriz,alto_bmp,ancho_bmp);
+	imprimirFiltro(matriz,alto_bmp,ancho_bmp);
 
 	//Si se puso el argumento '-b', se muestra el resultado de la clasficación.
 	if(flag == 1){

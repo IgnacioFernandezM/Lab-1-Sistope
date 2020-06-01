@@ -14,24 +14,28 @@
 */
 void clasificar(rgb ** matriz, int filas, int columnas, float umbral, char * nombre_imagen){
 
-	int total_pixeles = filas*columnas;
-	int num_pixeles_negros;
-	double porcentaje_pixeles_negros = 0;
+	double total_pixeles = filas*columnas;
+	int num_pixeles_negros = 0;
+	float porcentaje_pixeles_negros;
 	int i, j;
 
 	for(i = 0; i < filas; i++){
 		for(j = 0; j < columnas; j++){
+
 			if(matriz[i][j].pixel == 0){
 				num_pixeles_negros++;
 			}
 		}
 	}
-	porcentaje_pixeles_negros = num_pixeles_negros/total_pixeles*100;
+	porcentaje_pixeles_negros = (num_pixeles_negros/total_pixeles)*100;
+	printf("\n\ntotal pixeles: %.0f",total_pixeles);
+	printf("\nnumero_pixeles_negros: %i",num_pixeles_negros);
+	printf("\nporcentaje_pixeles_negros: %f",porcentaje_pixeles_negros);
 
 	if(porcentaje_pixeles_negros >= umbral){
-		printf("%s is nearly black\n",nombre_imagen);
+		printf("\n%s is nearly black\n",nombre_imagen);
 	}
 	else{
-		printf("%s is NOT nearly black\n",nombre_imagen);
+		printf("\n%s is NOT nearly black\n",nombre_imagen);
 	}
 }

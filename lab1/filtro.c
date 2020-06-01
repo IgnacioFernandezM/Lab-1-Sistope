@@ -10,7 +10,7 @@
 
 	Salida: Una matriz de enteros representando la mascara.
 */
-int ** leerArchivoMascara(char * nombre_archivo, int ** mascara){
+float ** leerArchivoMascara(char * nombre_archivo, float ** mascara){
 	
 	//Apertura de archivo.
 	FILE * archivo = fopen(nombre_archivo,"r");
@@ -21,9 +21,9 @@ int ** leerArchivoMascara(char * nombre_archivo, int ** mascara){
 	}
 
 	int i;
-	mascara = (int**)malloc(sizeof(int*)*3);
+	mascara = (float**)malloc(sizeof(float*)*3);
 	for(i = 0; i < 3; i++){
-		mascara[i] = (int*)malloc(sizeof(int)*3);
+		mascara[i] = (float*)malloc(sizeof(float)*3);
 	}
 	char buffer[100];
 	char * str = (char*)malloc(sizeof(char));
@@ -49,7 +49,7 @@ int ** leerArchivoMascara(char * nombre_archivo, int ** mascara){
 	printf("\nMascara laplaciano\n\n");
 	for(i = 0; i < 3; i++){
 		for(j = 0; j < 3; j++){
-			printf("%i ",mascara[i][j]);
+			printf("%.2f ",mascara[i][j]);
 		}
 		printf("\n");
 	}
@@ -68,6 +68,23 @@ void imprimirFiltro(rgb ** matriz, int filas, int columnas){
 		}
 	}
 }
+
+/*	
+	Función que determina si un par de valores fila y columna se encuentran dentro de los límites de la imagen
+
+	Entradas: -fila_actual: Entero que representa la fila a evaluar.
+			  -columna_actual: Entero que representa la columna a evaluar.
+			  -filas: Entero que representa el número de filas de la imagen.
+			  -columnas: Entero que representa el número de columnas de la imagen.
+
+	Salida:	Entero como flag  
+*/
+int dentroDeLimites(int fila_actual, int columna_actual, int filas, int columnas){
+
+	return fila_actual >= 0 && fila_actual <= filas-1 && columna_actual >= 0 && columna_actual <= columnas-1;
+
+}
+
 /*
 	Función que aplica el filtro laplaciano a la imagen
 
@@ -78,10 +95,62 @@ void imprimirFiltro(rgb ** matriz, int filas, int columnas){
 
 	Salida: La matriz de rgb que representa a la imagen.		  
 */
-rgb ** filtroLaplaciano(rgb ** matriz, int filas, int columnas, int ** mascara){
+rgb ** filtroLaplaciano(rgb ** matriz, int filas, int columnas, float ** mascara){
+
+	int i,j;
+	float pixel;
+	
+	for(i = 0; i < filas; i++){
+		for(j = 0; j < columnas; j++){
+
+			pixel = matriz[i][j].grey*mascara[1][1];
+
+			//Para cada posición adyacente al pixel actual se verifica si se encuentra dentro de la imagen.
+			if(dentroDeLimites(i-1,j-1,filas,columnas)){
+				pixel += matriz[i-1][j-1].grey*mascara[0][0];
+			}
+			if(dentroDeLimites(i-1,j,filas,columnas)){
+				pixel += matriz[i-1][j].grey*mascara[0][1];
+			}
+			if(dentroDeLimites(i-1,j+1,filas,columnas)){
+				pixel += matriz[i-1][j+1].grey*mascara[0][2];
+			}
+			if(dentroDeLimites(i,j-1,filas,columnas)){
+				pixel += matriz[i][j-1].grey*mascara[1][0];
+			}
+			if(dentroDeLimites(i,j+1,filas,columnas)){
+				pixel += matriz[i][j+1].grey*mascara[1][2];
+			}
+			if(dentroDeLimites(i+1,j-1,filas,columnas)){
+				pixel += matriz[i+1][j-1].grey*mascara[2][0];
+			}
+			if(dentroDeLimites(i+1,j,filas,columnas)){
+				pixel += matriz[i+1][j].grey*mascara[2][1];
+			}
+			if(dentroDeLimites(i+1,j+1,filas,columnas)){
+				pixel += matriz[i+1][j+1].grey*mascara[2][2];
+			}
+			matriz[i][j].pixel = pixel;		
+		}
+	}
+	return matriz;
+}
+/*
+	Función que aplica el filtro laplaciano a la imagen
+
+	Entradas: -Matriz de rgb representando la imagen
+			  - Entero como el número  de filas de la imagen.
+			  - Entero como el número de columnas de la imagen.
+			  -Matriz de enteros representando la mascara espacial.
+
+	Salida: La matriz de rgb que representa a la imagen.		  
+*/
+/*rgb ** filtroLaplaciano(rgb ** matriz, int filas, int columnas, int ** mascara){
 
 	int i,j,x,y;
 	float P;
+
+	//Matriz para representar los valores adyacentes a un pixel (0 en caso de que el pixel se encuentre en un borde)
 	float aux[3][3];
 
 	for(i = 0; i < filas; i++){
@@ -178,7 +247,7 @@ rgb ** filtroLaplaciano(rgb ** matriz, int filas, int columnas, int ** mascara){
 				aux[2][1] = matriz[i+1][j].grey;
 				aux[2][2] = 0;
 			}
-			//pixel fuera de bordes
+			//pixel que no se encuentra en algun borde
 			else{
 				aux[0][0] = matriz[i-1][j-1].grey;
 				aux[0][1] = matriz[i-1][j].grey;
@@ -202,5 +271,5 @@ rgb ** filtroLaplaciano(rgb ** matriz, int filas, int columnas, int ** mascara){
 		}
 	}	
 	return matriz;
-}
+}*/
 

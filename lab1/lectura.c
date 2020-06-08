@@ -30,33 +30,33 @@ int obtenerRGBDeCadaPixel(char * nombre_archivo){
 	//Se cierra el archivo
 	close(fd);
 	//Se comienza a descomprimir la imagen
-	cinfo.err = jpeg_std_error(&jerr);	
-	jpeg_create_decompress(&cinfo);
+	cinfoLectura.err = jpeg_std_error(&jerr);	
+	jpeg_create_decompress(&cinfoLectura);
 	//Se manipulan los datos de la imagen almacenados en contenido_jpg
-	jpeg_mem_src(&cinfo, contenido_jpg, tamano_jpg);
+	jpeg_mem_src(&cinfoLectura, contenido_jpg, tamano_jpg);
 	//Se verifica que el encabezado del contenido de la imagen es valido, de no ser valido se finaliza el programa
-	retorno = jpeg_read_header(&cinfo, TRUE);
+	retorno = jpeg_read_header(&cinfoLectura, TRUE);
 	if (retorno != 1) {
 		return 2;
 	}
 	// Se reasignan las variables de ancho alto tamaño del pixel y maximo de filas
-	jpeg_start_decompress(&cinfo);
-	ancho_bmp = cinfo.output_width;
-	alto_bmp = cinfo.output_height;
-	tamano_pixel = cinfo.output_components;
+	jpeg_start_decompress(&cinfoLectura);
+	ancho_bmp = cinfoLectura.output_width;
+	alto_bmp = cinfoLectura.output_height;
+	tamano_pixel = cinfoLectura.output_components;
 	tamano_bmp = ancho_bmp * alto_bmp * tamano_pixel;
 	contenido = (unsigned char*) malloc(tamano_bmp);
 	max_filas = ancho_bmp * tamano_pixel;
 	//Se leen todas las lineas escaneadas de la imagen, estas aparecen de forma R G B R G B...
 	//Por lo que cada posicion del arreglo contenido contiene un valor de cada pixel
-	while (cinfo.output_scanline < cinfo.output_height) {
+	while (cinfoLectura.output_scanline < cinfoLectura.output_height) {
 		unsigned char *buffer_array[1];
-		buffer_array[0] = contenido + (cinfo.output_scanline) * max_filas;
-		jpeg_read_scanlines(&cinfo, buffer_array, 1);
+		buffer_array[0] = contenido + (cinfoLectura.output_scanline) * max_filas;
+		jpeg_read_scanlines(&cinfoLectura, buffer_array, 1);
 	}
 	//Se termina de descomprimir la imagen
-	jpeg_finish_decompress(&cinfo);
-	jpeg_destroy_decompress(&cinfo);
+	jpeg_finish_decompress(&cinfoLectura);
+	jpeg_destroy_decompress(&cinfoLectura);
 	//Se libera memoria de la variable utilizada
 	free(contenido_jpg);
 	
@@ -78,7 +78,7 @@ rgb ** crearMatriz(int filas, int columnas){
 }
 
 /*Funcion que almacena los valores RGB de cada pixel en una matriz
-Entrada:- Matriz vacia con las dimensiones de la imagen jpg
+Entrada:- Matriz vacia 
 	- Cantidad de filas de la matriz
 	- Cantidad de columnas de la matriz
 Salida: - Matriz con los valores RGB de la imagen*/
@@ -91,7 +91,7 @@ rgb ** matrizContenido(rgb ** matriz, int filas, int columnas){
 			matriz[i][j].blue = contenido[k+2];
 			matriz[i][j].grey = 0;
 			matriz[i][j].pixel = 0;
-			k = k+3;
+			k = k + 3;
 		}
 	}
 	return matriz;
@@ -120,4 +120,15 @@ void liberarMatriz(rgb ** matriz, int filas){
 		free(matriz[i]);
 	}
 	free(matriz);
+}
+
+/*Funcion que libera memoria de la matriz que contiene los valores RGB y el procesamiento de esta para ingresar otra imagen
+Entrada: -Matriz a liberar memoria
+	-Cantidad de filas de la matriz
+Salida: Matriz actualizada
+*/
+rgb ** actualizarMatriz(rgb ** matriz, int alto_bmp){
+	liberarMatriz(matriz, alto_bmp);
+	rgb ** matrizNueva = (rgb**)malloc(sizeof(rgb*)*0);
+	return matrizNueva;
 }

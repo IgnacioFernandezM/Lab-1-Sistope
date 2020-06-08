@@ -9,9 +9,11 @@ struct stat info_archivo;
 	unsigned char * contenido_jpg;
 	unsigned long tamano_bmp;
 	unsigned char * contenido;
+	unsigned char * contenidoBinarizado;
 	int max_filas, ancho_bmp, alto_bmp, tamano_pixel;
 
-struct jpeg_decompress_struct cinfo;
+struct jpeg_decompress_struct cinfoLectura;
+struct jpeg_compress_struct cinfoEscritura;
 struct jpeg_error_mgr jerr;
 
 

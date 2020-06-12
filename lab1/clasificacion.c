@@ -2,23 +2,25 @@
 #include "estructura.h"
 
 /*
-	Función que determina si la imagen es o no nearly black.
+	Función que imprime por pantalla si una imagen es nearly black o no.
 
-	Entradas: - Matriz de rgb que representa la imagen.
-		      - Entero como el número de filas de la imagen.
-		      - Entero como el número de columnas de la imagen.
-		      - Flotante como el umbral de clasificación.
-			  - Cadena de caracteres como el nombre de la imagen.
+	Entradas: - matriz: Matriz de rgb que representa la imagen.
+		      - filas: Entero como el número de filas de la imagen.
+		      - columnas: Entero como el número de columnas de la imagen.
+		      - umbral: Flotante como el umbral de clasificación.
+			  - nombre_imagen: Cadena de caracteres como el nombre de la imagen.
+			  - num_img_actual: Entero indicando el número de la imagen a clasificar.
 
 	Salida: Vacio.
 */
-void clasificar(rgb ** matriz, int filas, int columnas, float umbral, char * nombre_imagen){
+void clasificar(rgb ** matriz, int filas, int columnas, float umbral, char * nombre_imagen, int num_img_actual){
 
 	double total_pixeles = filas*columnas;
 	int num_pixeles_negros = 0;
 	float porcentaje_pixeles_negros;
 	int i, j;
 
+	//Se suman los pixeles negros
 	for(i = 0; i < filas; i++){
 		for(j = 0; j < columnas; j++){
 
@@ -27,15 +29,19 @@ void clasificar(rgb ** matriz, int filas, int columnas, float umbral, char * nom
 			}
 		}
 	}
+	//Se obtiene el porcentaje de pixeles negros
 	porcentaje_pixeles_negros = (num_pixeles_negros/total_pixeles)*100;
-	printf("\n\ntotal pixeles: %.0f",total_pixeles);
-	printf("\nnumero_pixeles_negros: %i",num_pixeles_negros);
-	printf("\nporcentaje_pixeles_negros: %f",porcentaje_pixeles_negros);
+
+	//Se imprime resultado.
+	if(num_img_actual == 1){
+		printf("\n|      image      |  nearly black  |\n");
+		printf("|----------------------------------|\n");
+	}
 
 	if(porcentaje_pixeles_negros >= umbral){
-		printf("\n%s is nearly black\n",nombre_imagen);
+		printf("|  %s   |       yes      |\n",nombre_imagen);
 	}
 	else{
-		printf("\n%s is NOT nearly black\n",nombre_imagen);
-	}
+		printf("|  %s   |       no       |\n",nombre_imagen);
+	}	
 }

@@ -97,19 +97,6 @@ rgb ** matrizContenido(rgb ** matriz, int filas, int columnas){
 	return matriz;
 }
 
-/*Funcion que muestra el valor RGB de cada pixel
-Entrada:- Matriz con el contenido de la imagen
-	- Cantidad de filas de la matriz
-	- Cantidad de columnas de la matriz*/
-void imprimir(rgb ** matriz, int filas, int columnas){
-	int i, j;
-	for(i = 0; i < filas; i++){
-		for(j = 0; j < columnas; j++){
-			printf("%d/%d/%d ", matriz[i][j].red, matriz[i][j].green, matriz[i][j].blue);
-		}
-		//printf("\n");
-	}
-}
 
 /*Funcion que libera memoria de una matriz
 Entrada:-Matriz a liberar memoria

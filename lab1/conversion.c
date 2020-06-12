@@ -22,19 +22,3 @@ rgb ** conversionRGBAGris(rgb ** matriz, int filas, int columnas){
 	}
 	return matriz;
 }
-
-/*
-	Función que muestra la imagen convertida a gris
-	Entrada: - Matriz con el contenido de la imagen.
-	Salida: Vacio.
-*/
-void imprimirGris(rgb ** matriz, int filas, int columnas){
-
-	printf("\n\nConversion a gris\n\n");
-	int i,j;
-	for(i = 0; i < filas; i++){
-		for(j = 0; j < columnas; j++){
-			printf("%.2f ",matriz[i][j].grey);
-		}
-	}
-}

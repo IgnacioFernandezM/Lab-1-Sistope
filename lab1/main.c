@@ -19,11 +19,6 @@ int main(int argc, char * argv[]){
 
 	//Se obtienen los argumentos ingresados al ejecutar el programa.
 	recibirArgumentos(argc,argv,&num_img,&umbral_bin,&umbral_clasif,nombre_archivo_mascara,&flag);
-	printf("\nNumero de imagenes: %i\n",num_img);
-	printf("Umbral binarizacion: %f\n",umbral_bin);
-	printf("Umbral clasificacion %f\n",umbral_clasif);
-	printf("Nombre archivo mascara: %s\n",nombre_archivo_mascara);
-	printf("flag: %i\n",flag);
 	
 //--------------------------------------------------------------------------------------------------------------------------------
 	//Variable para indicar si se pudo leer el archivo, la matriz que contiene los pixeles de la imagen y el nombre de archivo
@@ -35,8 +30,8 @@ int main(int argc, char * argv[]){
 	//Matriz que contendra el contenido de la imagen
 	rgb ** matriz = (rgb**)malloc(sizeof(rgb*)*0);
 	//Matriz de la mascara que se aplica a la imagen
-	float ** mascara = (float**)malloc(sizeof(float*)*0);
-	//Se obtiene la mascara laplaciana
+	float ** mascara = crearMatrizMascara();
+	//Se obtienen los valores de la mascara laplaciana
 	mascara = leerArchivoMascara(nombre_archivo_mascara,mascara);
 	//Se crea el loop para leer la cantidad de imagenes solicitadas por comando
 	for(i = 1; i <= num_img; i++){
@@ -75,9 +70,9 @@ int main(int argc, char * argv[]){
 		matriz = binarizar(matriz,alto_bmp,ancho_bmp,umbral_bin);
 		//imprimirFiltro(matriz,alto_bmp,ancho_bmp);
 
-		//Si se puso el argumento '-b', se muestra el resultado de la clasficación.
+		//Si se puso el argumento '-b', se muestra el resultado de la clasificación.
 		if(flag == 1){
-			clasificar(matriz,alto_bmp,ancho_bmp,umbral_clasif,nombre_imagen);
+			clasificar(matriz,alto_bmp,ancho_bmp,umbral_clasif,nombre_imagen,i);
 		}
 		//Se crea el nombre del arhivo de salida
 		strcpy(nombre_imagen_procesada, "salida_");
@@ -95,17 +90,14 @@ int main(int argc, char * argv[]){
 		//Se libera espacio de la matriz para almacenar otra imagen
 		matriz = actualizarMatriz(matriz, alto_bmp);
 	}
-	//Se libera memoria de la matriz contenido y de la variable contenido;
+	//Se libera memoria.
 	liberarMatriz(matriz, 0);
 	free(contenido);
 	free(contenidoBinarizado);
-//--------------------------------------------------------------------------------------------------------------------------------
-
 	free(nombre_archivo_mascara);
-	for(i = 0; i < 3; i++){
-		free(mascara[i]);
-	}
-	free(mascara);
+	liberarMemoriaMascara(mascara);
+	
+	printf("\n\nFIN DEL PROGRAMA\n");
 	
 	return 0;
 }
